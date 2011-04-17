@@ -1,13 +1,60 @@
 SteakFm
 =======
 
-Introduction goes here.
+Extend Steak https://github.com/cavalle/steak to cope with large amount of features (make them maintainable) - similar as CucumberFM https://github.com/aslakhellesoy/cucumber was for cucumber.  https://github.com/aslakhellesoy/cucumber
 
+* it allow to put story and narration - in free natural language - as comment before background, scenario and feature
+* there is possibility to add meta information as comments
+* it parse rspec tags ( merge them with meta info in comments )
 
 Example
 =======
 
-Example goes here.
+    #  In order to fetch only scenarios that i want
+    #  as project manager, developer
+    #  I want to be able to create filter scope
+    # some comment
+    ## wireframe: http://cs3b.com
+    ## developer: mc
 
+    feature "Tag filter", :tag => true do
 
-Copyright (c) 2011 [name of plugin creator], released under the MIT license
+        #    Given system user "t_a@hp.mc/secret" with role "locale"
+        #    And system user "p_e@hp.mc/secret" with role "product"
+        #    And signed up with "not_system_user@hp.mc/secret"
+        #    And I sign in as "admin@github.com/test_pass"
+        #    And user "admin@hearingpages.com" has assigned role "sys_user"
+        #    And I am on system user administration page
+        ## title: I am logged in as user admin
+
+        background do
+        # ...
+        end
+
+        #  When I follow "New system user"
+        #  And I fill in "systemuser@hp.mc" for "Email"
+        #  And I fill in "password" for "Password"
+        #  And I fill in "password" for "Password Confirmation"
+        #  And I fill in "password" for "Password Confirmation"
+        ## wireframe: http://somelink
+        ## effort: 5.25
+
+        scenario "creating filter scope", :milestone => '0.2', :status => :todo do
+        # ...
+        end
+
+        # When I set user with <id> email address <email>
+        # Then he would have role <roles>
+        #
+        #  Examples:
+        #    |id   |email                |roles                             |
+        #    |5    |some@oo.com          |admin                             |
+        ## effort: 3
+
+        scenario "Selecting filter scope as active", :milestone => '0.1', :status => 'backlog' do
+        # ...
+        end
+
+    end
+
+Copyright (c) 2011 [cs3b], released under the MIT license
