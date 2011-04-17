@@ -3,9 +3,12 @@ module SteakFM
     class Scenario < Struct.new(:feature, :raw)
       PATTERN = /((^.*#+.*\n)+\n?)?(^.*@+.*\n)?^[ \t]*scenario ".*"(.*do\b(.*?\n?)+end)?/
 
+      include SteakFM::FeatureElement::Component::Story
+      include SteakFM::FeatureElement::Component::Title
+
+
 # TODO
 #      include SteakFM::FeatureElement::Component::Tags
-#      include SteakFM::FeatureElement::Component::Title
 #      include SteakFM::FeatureElement::Component::Comments
 
       # todo cleanup this fake

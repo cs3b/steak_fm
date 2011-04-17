@@ -1,4 +1,7 @@
 # SteakFm
+require 'steak_f_m/feature_element/component/story'
+require 'steak_f_m/feature_element/component/title'
+
 require 'steak_f_m/config'
 require 'steak_f_m/feature'
 require 'steak_f_m/meta_info_filter'
