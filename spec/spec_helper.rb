@@ -1,0 +1,1 @@
+require 'steak_feature_manager'
