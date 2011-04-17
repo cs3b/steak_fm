@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+  <title>Documentation</title>
+  <link href="<%= asset_link('bespin/BespinEmbedded.css') -%>" media="screen" rel="stylesheet" type="text/css"/>
+  <script src="<%= asset_link('bespin/BespinEmbedded.js') -%>"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+  <link href="<%= asset_link('stylesheets/reset.css') -%>" media="screen" rel="stylesheet" type="text/css"/>
+  <link href="<%= asset_link('stylesheets/layout.css') -%>" media="screen" rel="stylesheet" type="text/css"/>
+  <link href="<%= asset_link('stylesheets/inputs.css') -%>" media="screen" rel="stylesheet" type="text/css"/>
+  <link href="<%= asset_link('stylesheets/device_width.css') -%>" media="screen" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<a href="http://github.com/cs3b/cucumber_fm"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+<div id="container">
+  <div id="menu">
+    <ul>
+      <li><%= link_to "business overview", documentation_features_path,
+                      :class => "business#{highlight('business_overview')}" %></li>
+      <!--<li><%#= link_to "statistic", statistic_documentation_features_path, :class => "statistic#{highlight('statistic')}" %></li>-->
+    </ul>
+  </div>
+    <%= content_tag('div', flash[:error], :class => 'error') if flash[:error] %>
+    <%= content_tag('div', flash[:notice], :class => 'notice') if flash[:notice] %>
+  <div id="content">
+    <%= yield %>
+  </div>
+  <div id="footer">
+    <p>Developed by: <%= link_to "cs3b", "http://cs3b.com" %><span>/</span>Graphic Design: <%= link_to "selleo", "http://www.selleo.com/" %></p>
+  </div>
+</div>
+</body>
+</html>

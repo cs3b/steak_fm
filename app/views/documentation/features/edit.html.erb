@@ -1,0 +1,236 @@
+<div class="frame">
+  <div class="head">
+    <div class="actions">
+      <h2>Actions</h2>
+      <%= link_to_function '', '$("#actions_more").toggle();', :class => "toggler" %>
+    </div>
+    <h1>[ <%= @feature.info.meta_info.to_s %> ] ::: <%= @feature.info.title %> - <i><%= @feature.relative_path %></i>
+    </h1>
+  </div>
+  <div class="content two_columns">
+    <div class="left">
+      <div id="raw-bespin" class="bespin" data-bespinoptions='{ "settings": { "tabstop": 2, "theme": "white" }, "syntax": "gherkin", "stealFocus": true }'><%= @feature.raw -%></div>
+    </div>
+
+    <div class="right">
+
+      <div id="right_wrapper">
+
+        <div class="pdd">
+          <div id="actions_more" style="display: none;">
+            <% form_tag documentation_feature_path(@feature.id), :name => 'edit_form' do %>
+                <%= hidden_field_tag 'raw', '' %>
+
+                <%= hidden_field_tag 'config[tags]', @cfm.config.tags %>
+                <%= hidden_field_tag 'config[dir]', @cfm.config.dir %>
+                <%= hidden_field_tag 'config[aggregate][]', @cfm.config.aggregate.first %>
+                <%= hidden_field_tag 'config[aggregate][]', @cfm.config.aggregate.last %>
+
+                <ul class="form_fields">
+                  <li>
+                    <label for="config_cvs_commit">
+                      <%= hidden_field_tag 'config[cvs_commit]', 0 %>
+                      <%= check_box_tag 'config[cvs_commit]', 1, @cfm.config.cvs_commit=='1' %>
+                      Commit
+                    </label>
+                    <label for="config_cvs_push">
+                      <%= hidden_field_tag 'config[cvs_push]', 0 %>
+                      <%= check_box_tag 'config[cvs_push]', 1, @cfm.config.cvs_push=='1' %>
+                      Push
+                    </label>
+                  </li>
+                </ul>
+            <% end %>
+          </div>
+
+          <div class="ta_r">
+            <%= link_to_function "Save", "document.getElementById('raw').value= editor.value; document.edit_form.submit();", :class => "bt" %>
+          </div>
+
+        </div>
+
+
+        <div class="header">
+          <h2>File Management</h2>
+          <%= link_to_function '', '$("#file_management_more").toggle();', :class => "toggler" %>
+        </div>
+
+        <div id="file_management_more" style="display: none;">
+
+          <div class="pdd">
+            <% form_tag rename_documentation_feature_path(@feature.id) do %>
+                <fieldset class="inputs inputs_140 inputs_inline">
+                  <ol>
+                    <li class="string">
+                      <%= text_field_tag :name %>
+                    </li>
+                    <li class="commit">
+                      <div class="bt bt_blue">
+                        <%= submit_tag 'rename' %>
+                      </div>
+                    </li>
+                  </ol>
+                </fieldset>
+            <% end %>
+            <% form_tag move_documentation_feature_path(@feature.id) do %>
+                <fieldset class="inputs inputs_140 inputs_inline">
+                  <ol>
+                    <li class="select">
+                      <%= select_tag 'dir', options_for_select(list_of_dirs, :selected => @cfm.config.dir) %>
+                    </li>
+                    <li class="commit">
+                      <div class="bt bt_blue">
+                        <%= submit_tag 'move' %>
+                      </div>
+                    </li>
+                  </ol>
+                </fieldset>
+            <% end %>
+          </div>
+          <div class="pdd ta_r">
+            <%= link_to 'Delete', delete_documentation_feature_path(@feature.id), :confirm => "Do you really want to remove this feature?", :class => "bt" %>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="header">
+        <h2>Navigation</h2>
+        <%= text_field_tag 'navigation_query', '', :onKeyUp => 'navigationFilter();' %>
+      </div>
+
+      <div id="navigator_wrapper" style="height: 469px;">
+        <ul class="navigator_list">
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="clb"></div>
+
+  </div>
+</div>
+
+
+<script>
+
+    window.onBespinLoad = function() {
+        var edit = document.getElementById("raw-bespin");
+        var env = edit.bespin;
+        window.editor = env.editor;
+        editor.value = editor.value.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+        navigationRedraw();
+        editor.textChanged.add(function(oldRange, newRange, newText) {
+            navigationRedraw();
+        });
+
+    <% if params.has_key?('query') %>
+    <%= "scrollToFirstMatchingLine('#{escape_javascript(params['query'])}');" %>
+    <% end %>
+    };
+
+
+    function editorLines() {
+        return(editor.value.split("\n"));
+    }
+
+    function navigationElement(line_number, title, scenario_tags, estimation) {
+        return("<li><h5><a onclick=\"scrollTo(" + line_number + ");; return false;\" href=\"#\">" + title + "</a></h5>\
+       <p>" + scenario_tags + "</p>\
+       <span class=\"marker m_magenta\" style=\"position:absolute; top: 13px; right: 5px;\">" + estimation + "</span> </li>");
+    }
+
+    function navigationRedraw() {
+        var scenario_line = /Scenario( Outline)?:/
+        var scenario_title = /Scenario( Outline)?:\s?/
+        var navigation = ""
+        var line_before = ""
+        var tags_line = ""
+        var estimation = ""
+        $.each(editorLines(), function(index, line) {
+            if (line_before.match(/^\s*@.+/)) {
+                tags_line = line_before;
+                if (tags_line.match(/@\d+/)) {
+                    var estimation_tag = tags_line.match(/@\d+(\.\d+)?/)
+                    estimation = estimation_tag[0].replace('@', '');
+                }
+            }
+            else {
+                tags_line = 'no tags found'
+                estimation = 'NaN';
+            }
+
+            if (scenario_line.test(line)) {
+                navigation += navigationElement(index + 1, line.replace(scenario_title, ''), tags_line, estimation);
+            }
+            line_before = line;
+        });
+        $('.navigator_list').html(navigation);
+        navigationFilter();
+    }
+
+    function scrollTo(number) {
+        editor.setLineNumber(number);
+    }
+
+    function findLineWithText(text) {
+        var _pattern = new RegExp(text);
+        var _lines = window.editor.value.split("\n")
+        var _matching_lines = [];
+
+        $.each(_lines, function(index, _line) {
+            if (_line.match(_pattern) != null) {
+                _matching_lines.push(index)
+            }
+        });
+        return(_matching_lines[0] + 1);
+    }
+
+    function scrollToFirstMatchingLine(text) {
+        scrollTo(findLineWithText(text));
+    }
+
+    function showOnlyScenariosThatPassFilterOnNavigationList(filter) {
+        if (filter != null || filter != "") {
+            var jqueryExpression = "";
+            $.each(filter.split(/\s+/), function(index, word) {
+                if (word.match(/^~/)) {
+                    jqueryExpression += ':not(:contains(\'' + word.replace('~', '') + '\'))';
+                }
+                else {
+                    jqueryExpression += ':contains(\'' + word + '\')';
+                }
+            })
+
+            var show_expression = "ul.navigator_list > li" + jqueryExpression;
+            $("ul.navigator_list > li").hide();
+            $(show_expression).show();
+        }
+        else {
+            $("ul.navigator_list > li").show();
+        }
+    }
+
+    function navigationFilter() {
+        showOnlyScenariosThatPassFilterOnNavigationList($('#navigation_query').attr('value'));
+    }
+
+    function changeRightHeight()
+    {
+        var h = 600 - 43 - $("#right_wrapper").height();
+
+        $("#navigator_wrapper").height(h);
+    }
+
+    jQuery(document).ready(function() {
+
+        $('.toggler').bind("click", function() {
+            $(this).toggleClass("toggler_minus");
+            changeRightHeight()
+        });
+
+        $("#navigator_wrapper").height(469);
+    })
+
+</script>
