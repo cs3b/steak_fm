@@ -3,13 +3,13 @@ require 'spec_helper'
 describe SteakFeatureManager do
   context "files scaning" do
     before(:all) do
-      @cfm = SteakFeatureManager.new("spec_fake/acceptance")
+      @cfm = SteakFeatureManager.new("spec_fake/spec/acceptance")
     end
     it "should store path for features" do
-      @cfm.prefix.should == 'spec_fake/acceptance'
+      @cfm.prefix.should == 'spec_fake/spec/acceptance'
     end
     it "should scan files in specific directory" do
-      @cfm.should have(5).features
+      @cfm.should have(4).features
     end
     it "should return list of all scenarios" do
       @cfm.should have(5).scenarios
@@ -21,7 +21,7 @@ describe SteakFeatureManager do
 
   context "features filtering by one tag" do
     before(:all) do
-      @cfm = SteakFeatureManager.new("spec_fake/acceptance", "spec_fake", {'tags' => 'milestone:0.1'})
+      @cfm = SteakFeatureManager.new("spec_fake/spec/acceptance", "spec_fake", {'tags' => 'milestone:0.1'})
     end
     it "should scan files that have one tag" do
       @cfm.should have(3).features
@@ -34,7 +34,7 @@ describe SteakFeatureManager do
 
   context "features filtering by one multiple tags" do
     before(:all) do
-      @cfm = SteakFeatureManager.new("spec_fake/acceptance", "spec_fake", {'tags' => 'milestone:0.1 @mc'})
+      @cfm = SteakFeatureManager.new("spec_fake/spec/acceptance", "spec_fake", {'tags' => 'milestone:0.1 developer:mc'})
     end
     it "should scan files that have every one tag" do
       @cfm.should have(1).features
@@ -46,10 +46,10 @@ describe SteakFeatureManager do
 
   context "dir scoping" do
     before(:all) do
-      @cfm = SteakFeatureManager.new("spec_fake/acceptance", "spec_fake", {'dir' => 'subdir'})
+      @cfm = SteakFeatureManager.new("spec_fake/spec/acceptance", "spec_fake", {'dir' => 'subdir'})
     end
     it "should scan files in specific directory" do
-      @cfm.should have(3).features
+      @cfm.should have(2).features
     end
     it "should return list of all scenarios" do
       @cfm.should have(1).scenarios
