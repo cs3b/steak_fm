@@ -1,6 +1,10 @@
 # SteakFm
+require 'steak_f_m/feature_element/component/meta_info_ext/comment'
+require 'steak_f_m/feature_element/component/meta_info_ext/hash'
+
 require 'steak_f_m/feature_element/component/story'
 require 'steak_f_m/feature_element/component/title'
+require 'steak_f_m/feature_element/component/meta_info'
 
 require 'steak_f_m/config'
 require 'steak_f_m/feature'
@@ -92,7 +96,8 @@ class SteakFeatureManager < Struct.new(:path, :repo_path, :config_parameters)
 #  end
 
   def scan_features
-    all_features.collect { |feature| feature if filter.pass?(feature.tags_all) }.compact
+    all_features
+#    all_features.collect { |feature| feature if filter.pass?(feature.tags_all) }.compact
   end
 
   def all_features

@@ -5,7 +5,7 @@ describe SteakFM::FeatureElement::Scenario do
 raw = %q{# Given user is do
 # When he is doing this
 # then it would happend that
-## estimation: 5
+## effort: 5
 ## developer: mc
 
 scenario "nice scenario title", :milestone => '0.1', :status => 'todo' do
@@ -13,7 +13,7 @@ scenario "nice scenario title", :milestone => '0.1', :status => 'todo' do
 end}
    @feature = SteakFM::Feature.new('fake_path')
    @scenario = SteakFM::FeatureElement::Scenario.new(@feature, raw)
-   @scenario.stub!(:parent_tags).and_return(['@mc', '@_done', '@aaa', '@4.5'])
+   @feature.stub!(:meta_info).and_return({})
   end
 
   it "should have access to feature" do
@@ -26,14 +26,22 @@ When he is doing this
 then it would happend that}
   end
 
-  it "should parse hash meta info" do
+  it "should find milestone from hash meta info" do
     @scenario.meta_info.should have_key(:milestone)
+    @scenario.milestone == '0.1'
+  end
+  it "should find status from hash meta info" do
     @scenario.meta_info.should have_key(:status)
+    @scenario.status.should == 'todo'
   end
 
-  it "should parse comments meta info" do
-    @scenario.meta_info.should have_key(:milestone)
-    @scenario.meta_info.should have_key(:status)
+  it "should find effort from comments meta info" do
+    @scenario.meta_info.should have_key(:effort)
+  end
+
+  it "should find developer from comments meta info" do
+    @scenario.meta_info.should have_key(:developer)
+    @scenario.developer.should == 'mc'
   end
 
   it "should parse title" do
@@ -41,6 +49,6 @@ then it would happend that}
   end
 
   it "should parse estimation" do
-    @scenario.estimation.should == 2.5
+    @scenario.effort.should == 5.0
   end
 end

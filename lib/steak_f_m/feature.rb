@@ -3,6 +3,10 @@ module SteakFM
 
 #    include FeatureElement::Component::TotalEstimation
 
+    include SteakFM::FeatureElement::Component::Story
+    include SteakFM::FeatureElement::Component::Title
+    include SteakFM::FeatureElement::Component::MetaInfo
+
     FEATURE_PATTERN = /((^.*#+.*\n)+\n?)?(^.*@+.*\n)?^[ \t]*feature ".*"/
 
     def id
@@ -13,12 +17,12 @@ module SteakFM
       path.gsub(/^#{cfm.path}\//, '')
     end
 
-    def raw
-      @raw ||= read_content_from_file
+    def file_raw
+      @file_raw ||= read_content_from_file
     end
 
-    def raw= content
-      @raw = content
+    def file_raw= content
+      @file_raw = content
     end
 
     def info
@@ -33,13 +37,13 @@ module SteakFM
       @scenarios ||= fetch_scenarios
     end
 
-    def tags
-      info.tags
-    end
-
-    def tags_all
-      scenarios.collect { |scenario| scenario.tags }.flatten.uniq
-    end
+#    def tags
+#      info.tags
+#    end
+#
+#    def tags_all
+#      scenarios.collect { |scenario| scenario.tags }.flatten.uniq
+#    end
 
     def save
       write_content_to_file
@@ -67,7 +71,7 @@ module SteakFM
     end
 
     def valid?
-      raw =~ FEATURE_PATTERN
+      file_raw =~ FEATURE_PATTERN
     end
 
     private
@@ -77,7 +81,7 @@ module SteakFM
     end
 
     def write_content_to_file
-      File.open(path, 'w') { |stream| stream.write raw }
+      File.open(path, 'w') { |stream| stream.write file_raw }
     end
 
 
@@ -105,18 +109,19 @@ module SteakFM
 
     def fetch_scenarios
       scenarios = []
-      text = raw
-      while match = scan_for_scenarios_from(text)
+      text = file_raw
+      while match = FeatureElement::Scenario::PATTERN.match(text)
         FeatureElement::Scenario.new(self, match[0]).tap do |scenario|
-          scenarios.push(scenario) if cfm.filter.pass?(scenario.tags)
+#          scenarios.push(scenario) if cfm.filter.pass?(scenario.tags)
+          scenarios.push(scenario)
         end
         text = match.post_match
       end
       scenarios
     end
 
-    def scan_for_feature_info_from_raw
-      if match = FeatureElement::Info::PATTERN.match(raw)
+    def raw
+      if match = FEATURE_PATTERN.match(file_raw)
         match[0]
       else
         ''
@@ -124,15 +129,11 @@ module SteakFM
     end
 
     def scan_for_background_from_raw
-      if match = FeatureElement::Background::PATTERN.match(raw)
+      if match = FeatureElement::Background::PATTERN.match(file_raw)
         match[0]
       else
         ''
       end
-    end
-
-    def scan_for_scenarios_from(string)
-      FeatureElement::Scenario::PATTERN.match(string)
     end
 
   end
