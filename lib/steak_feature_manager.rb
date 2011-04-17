@@ -14,15 +14,6 @@ require 'steak_f_m/meta_info_filter'
 
 require 'steak_f_m/feature_element/scenario'
 
-# feature
-# for no multiline
-# ((^.*#+.*\n)+\n?)?(^.*@+.*\n)?^[ \t]*feature ".*"(,\s".*")?\sdo
-#as same but simpler
-# ((^.*#+.*\n)+\n?)?(^.*@+.*\n)?^[ \t]*feature.*\sdo
-
-
-# scenario have duty regex
-# ((^.*#+.*\n)+\n?)?(^.*@+.*\n)?^[ \t]*scenario ".*".*do\b(.*?\n?)+end
 class SteakFeatureManager < Struct.new(:path, :repo_path, :config_parameters)
 
 #  include Grit
