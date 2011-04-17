@@ -34,7 +34,7 @@ class Documentation::FeaturesController < Documentation::ApplicationController
   end
 
   def update
-    @feature.raw=(params[:raw])
+    @feature.file_raw=(params[:raw])
     @feature.save
     redirect_to :action => :edit
   end

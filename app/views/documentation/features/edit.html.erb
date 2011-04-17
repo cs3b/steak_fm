@@ -4,12 +4,12 @@
       <h2>Actions</h2>
       <%= link_to_function '', '$("#actions_more").toggle();', :class => "toggler" %>
     </div>
-    <h1>[ <%= @feature.info.meta_info.to_s %> ] ::: <%= @feature.info.title %> - <i><%= @feature.relative_path %></i>
+    <h1>[ <%= @feature.meta_info.to_s %> ] ::: <%= @feature.title %> - <i><%= @feature.relative_path %></i>
     </h1>
   </div>
   <div class="content two_columns">
     <div class="left">
-      <div id="raw-bespin" class="bespin" data-bespinoptions='{ "settings": { "tabstop": 2, "theme": "white" }, "syntax": "gherkin", "stealFocus": true }'><%= @feature.raw -%></div>
+      <div id="raw-bespin" class="bespin" data-bespinoptions='{ "settings": { "tabstop": 2, "theme": "white" }, "syntax": "gherkin", "stealFocus": true }'><%= @feature.file_raw -%></div>
     </div>
 
     <div class="right">
