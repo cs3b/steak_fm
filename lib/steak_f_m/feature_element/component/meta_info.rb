@@ -24,6 +24,10 @@ module SteakFM
           meta_info[:effort] ? meta_info[:effort].to_f : 0.0
         end
 
+        def status
+          meta_info[:status] || 'backlog'
+        end
+
         private
 
         def fetch_meta_info
