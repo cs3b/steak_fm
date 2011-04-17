@@ -3,6 +3,8 @@ SteakFm
 
 Extend Steak https://github.com/cavalle/steak to cope with large amount of features (make them maintainable) - similar as CucumberFM https://github.com/aslakhellesoy/cucumber was for cucumber.  https://github.com/aslakhellesoy/cucumber
 
+It's attempt to have business language stories ( in free format ) and connected with them automatic acceptance tests, but without need to write step definitions.
+
 * it allow to put story and narration - in free natural language - as comment before background, scenario and feature
 * there is possibility to add meta information as comments
 * it parse rspec tags ( merge them with meta info in comments )
