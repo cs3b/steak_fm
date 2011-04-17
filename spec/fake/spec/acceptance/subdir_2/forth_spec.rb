@@ -1,9 +1,12 @@
-Feature: Edit feature content
+feature "Edit feature content", %q{
   To update requirement for project
   product owner
-  should be able to change feature content
+  should be able to change feature content} do
 
-  Scenario: Inserting Background
+  scenario "Inserting Background"
 
-  @2.75 @m1 @mc
-  Scenario: Inserting Scenario when cursor on text field
+  #estimation: 2.75
+  #developer: mc
+  scenario "Inserting Scenario when cursor on text field", :milestone => '0.1'
+
+end
