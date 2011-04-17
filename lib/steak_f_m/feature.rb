@@ -6,8 +6,11 @@ module SteakFM
     include SteakFM::FeatureElement::Component::Story
     include SteakFM::FeatureElement::Component::Title
     include SteakFM::FeatureElement::Component::MetaInfo
+    include SteakFM::FeatureElement::Component::MetaInfoExt::TotalEffort
 
     FEATURE_PATTERN = /((^.*#+.*\n)+\n?)?(^.*@+.*\n)?^[ \t]*feature ".*"/
+
+    alias_method :narration, :story
 
     def id
       Base64.encode64(relative_path)

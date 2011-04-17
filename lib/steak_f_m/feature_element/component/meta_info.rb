@@ -16,7 +16,7 @@ module SteakFM
           @tags = tags
         end
 
-        def done?
+        def complete?
           STATUS_COMPLETE.include?(status)
         end
 

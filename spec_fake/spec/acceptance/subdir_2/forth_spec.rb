@@ -5,8 +5,8 @@ feature "Edit feature content", %q{
 
   scenario "Inserting Background"
 
-  #estimation: 2.75
-  #developer: mc
+  ## effort: 2.75
+  ## developer: mc
   scenario "Inserting Scenario when cursor on text field", :milestone => '0.1'
 
 end

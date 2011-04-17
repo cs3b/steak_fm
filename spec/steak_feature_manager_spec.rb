@@ -15,7 +15,7 @@ describe SteakFeatureManager do
       @cfm.should have(5).scenarios
     end
     it "should compute correct total estimation value" do
-      @cfm.estimation.should == 15.25
+      @cfm.effort.should == 15.25
     end
   end
 

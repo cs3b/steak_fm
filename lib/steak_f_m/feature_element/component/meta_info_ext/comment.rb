@@ -4,7 +4,7 @@ module SteakFM
       module MetaInfoExt
         module Comment
 
-          COMMENT_METADATA_PATTERN = /(^\s*##.*\n)+(?=((.*\n)*(scenario|feature|background) ".*"))/
+          COMMENT_METADATA_PATTERN = /(^\s*##.*\n)+(?=((.*\n)*^.*(scenario|feature|background) ".*"))/
 
 
           def comments_meta_info

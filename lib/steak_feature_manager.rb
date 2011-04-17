@@ -1,4 +1,6 @@
+require 'base64'
 # SteakFm
+require 'steak_f_m/feature_element/component/meta_info_ext/total_effort'
 require 'steak_f_m/feature_element/component/meta_info_ext/comment'
 require 'steak_f_m/feature_element/component/meta_info_ext/hash'
 
@@ -24,7 +26,8 @@ require 'steak_f_m/feature_element/scenario'
 class SteakFeatureManager < Struct.new(:path, :repo_path, :config_parameters)
 
 #  include Grit
-#  include SteakFM::FeatureElement::Component::TotalEstimation
+
+  include SteakFM::FeatureElement::Component::MetaInfoExt::TotalEffort
 
   attr_reader :info
 
